@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>ToneCoach</title>
+  <title>EmotionTalk</title>
 
   <style>
     :root{
@@ -30,7 +30,6 @@
     html,body{height:100%}
     body{
       margin:0; color:var(--text);
-      /* Crisp, legible system-first stack (works everywhere) */
       font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Inter,Roboto,Arial,system-ui,sans-serif;
       letter-spacing:.1px;
       background:
@@ -42,14 +41,21 @@
     .wrap{max-width:1040px;margin:0 auto;padding:28px 20px 60px}
 
     /* Header */
-    .header{display:flex;align-items:center;gap:14px;margin-bottom:10px}
-    .logo{
-      width:42px;height:42px;border-radius:12px;display:grid;place-items:center;
+    .header{display:flex;align-items:center;gap:16px;margin-bottom:10px}
+    .logoMark{
+      width:48px;height:48px;border-radius:14px;display:grid;place-items:center;flex:none;
       background:linear-gradient(135deg,var(--accent),var(--accent-3));
       box-shadow:0 10px 26px rgba(59,130,246,.34)
     }
-    .logo svg{width:22px;height:22px;filter:drop-shadow(0 1px 1px rgba(0,0,0,.25))}
-    .title{font-size:24px;font-weight:800;letter-spacing:.2px}
+    .logoMark svg{width:28px;height:28px;filter:drop-shadow(0 1px 1px rgba(0,0,0,.25))}
+    .brand{
+      display:flex;flex-direction:column;gap:2px
+    }
+    .wordmark{
+      display:flex;align-items:baseline;gap:10px;line-height:1
+    }
+    .wordmark .brandE{color:var(--accent);font-weight:900;letter-spacing:.2px;font-size:28px}
+    .wordmark .rest{color:var(--text);font-weight:800;letter-spacing:.2px;font-size:28px}
     .sub{color:var(--muted);font-size:12px;margin-top:2px}
 
     /* Tabs */
@@ -143,15 +149,34 @@
 </head>
 <body>
   <div class="wrap">
-    <!-- Header (no backend text) -->
+    <!-- Header with custom logo + wordmark -->
     <div class="header">
-      <div class="logo" aria-label="ToneCoach logo">
-        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path d="M13.5 2 6 12h5l-1.5 8L18 10h-5L13.5 2z" fill="#fff"/>
+      <div class="logoMark" aria-label="EmotionTalk logo">
+        <!-- Chat bubble with heartbeat (SVG) -->
+        <svg viewBox="0 0 200 200" fill="none" aria-hidden="true">
+          <!-- bubble + tail -->
+          <path
+            d="M36 36h128a20 20 0 0 1 20 20v68a20 20 0 0 1-20 20H96l-26 26a8 8 0 0 1-13-6v-20H36a20 20 0 0 1-20-20V56a20 20 0 0 1 20-20Z"
+            fill="url(#g1)"/>
+          <!-- heartbeat glow -->
+          <path d="M48 104h18l12-26 12 46 12-30 14 10h36"
+            stroke="rgba(255,255,255,.28)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <!-- heartbeat stroke -->
+          <path d="M48 104h18l12-26 12 46 12-30 14 10h36"
+            stroke="#fff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <defs>
+            <linearGradient id="g1" x1="36" y1="36" x2="180" y2="144" gradientUnits="userSpaceOnUse">
+              <stop offset="0"  stop-color="#3b82f6"/>
+              <stop offset="1"  stop-color="#60a5fa"/>
+            </linearGradient>
+          </defs>
         </svg>
       </div>
-      <div>
-        <div class="title">ToneCoach</div>
+
+      <div class="brand">
+        <div class="wordmark" role="img" aria-label="EmotionTalk">
+          <span class="brandE">E</span><span class="rest">motionTalk</span>
+        </div>
         <div class="sub">Emotion-aware live coaching</div>
       </div>
     </div>
@@ -173,7 +198,6 @@
               <div id="status" style="font-weight:700">idle</div>
             </div>
             <div class="spacer"></div>
-            <!-- Primary style (matches Analyze) -->
             <button id="endBtn" class="btn small" title="End & Summarize">End &amp; Summarize</button>
           </div>
         </div>
