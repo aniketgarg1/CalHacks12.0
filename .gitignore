@@ -1,0 +1,20 @@
+.DS_Store
+node_modules/
+dist/
+build/
+.cache/
+.out/
+coverage/
+*.log
+frontend/public/build/
+frontend/public/dist/
+
+# keep env files local
+.env
+*.env
+backend/.env
+frontend/.env
+
+# editor
+.vscode/
+.idea/

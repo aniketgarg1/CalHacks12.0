@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ToneCoach</title>
+
+  <style>
+    :root{
+      /* Primary blues */
+      --accent: #3b82f6;
+      --accent-2:#2563eb;
+      --accent-3:#60a5fa;
+
+      /* Mic cyan (distinct from primary) */
+      --mic:#06b6d4;
+      --mic-2:#0891b2;
+
+      /* Surface */
+      --bg: #0a1020;
+      --bg2:#0a1226;
+      --glass: rgba(15, 20, 34, .55);
+      --card: rgba(19, 24, 39, .66);
+      --border: rgba(255,255,255,.08);
+      --muted:#9ca3af;
+      --text:#e8ecf3;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      /* Crisp, legible system-first stack (works everywhere) */
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Inter,Roboto,Arial,system-ui,sans-serif;
+      letter-spacing:.1px;
+      background:
+        radial-gradient(1200px 800px at 20% -10%, rgba(59,130,246,.14), transparent),
+        radial-gradient(900px 600px at 110% 10%, rgba(99,102,241,.10), transparent),
+        linear-gradient(180deg, var(--bg2), var(--bg));
+    }
+
+    .wrap{max-width:1040px;margin:0 auto;padding:28px 20px 60px}
+
+    /* Header */
+    .header{display:flex;align-items:center;gap:14px;margin-bottom:10px}
+    .logo{
+      width:42px;height:42px;border-radius:12px;display:grid;place-items:center;
+      background:linear-gradient(135deg,var(--accent),var(--accent-3));
+      box-shadow:0 10px 26px rgba(59,130,246,.34)
+    }
+    .logo svg{width:22px;height:22px;filter:drop-shadow(0 1px 1px rgba(0,0,0,.25))}
+    .title{font-size:24px;font-weight:800;letter-spacing:.2px}
+    .sub{color:var(--muted);font-size:12px;margin-top:2px}
+
+    /* Tabs */
+    .tabs{display:flex;gap:10px;margin:14px 0 18px}
+    .tab{
+      padding:10px 14px;border:1px solid var(--border);border-radius:12px;
+      background:rgba(17,25,40,.58);cursor:pointer;transition:all .18s ease;color:#cfe2ff;
+      font-weight:600
+    }
+    .tab:hover{border-color:#2b3a55;box-shadow:0 0 0 2px rgba(96,165,250,.12) inset}
+    .tab.active{
+      color:#fff;
+      background:linear-gradient(180deg, rgba(59,130,246,.18), rgba(59,130,246,.06));
+      outline:2px solid rgba(59,130,246,.55);
+      text-shadow:0 1px 0 rgba(0,0,0,.25)
+    }
+
+    /* Shells */
+    .frame{
+      background:linear-gradient(180deg, rgba(255,255,255,.02), transparent),var(--glass);
+      border:1px solid var(--border);border-radius:16px;
+      box-shadow:0 16px 44px rgba(0,0,0,.30);backdrop-filter:blur(10px)
+    }
+    .container{padding:16px}
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.02), transparent), var(--card);
+      border:1px solid var(--border);border-radius:16px;padding:16px
+    }
+    .muted{color:var(--muted);font-size:12px}
+
+    .row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+    .grid{display:grid;gap:14px;grid-template-columns:1fr 1fr}
+    @media (max-width:900px){.grid{grid-template-columns:1fr}}
+
+    /* Inputs / buttons */
+    textarea{
+      width:100%;height:110px;background:#0b1324;color:var(--text);
+      border:1px solid var(--border);border-radius:14px;padding:12px;outline:none;resize:vertical;
+      font-size:14px
+    }
+    textarea:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(59,130,246,.25)}
+
+    .btn{
+      background:linear-gradient(180deg,var(--accent),var(--accent-2));
+      color:#fff;border:none;border-radius:12px;padding:10px 14px;cursor:pointer;font-weight:800;
+      letter-spacing:.2px;transition:transform .08s ease, filter .12s ease,box-shadow .12s ease
+    }
+    .btn:hover{filter:brightness(1.06)}
+    .btn:active{transform:translateY(1px)}
+    .btn.ghost{background:transparent;border:1px solid var(--border);color:var(--text);font-weight:700}
+    .btn.small{padding:8px 12px;border-radius:10px}
+
+    /* Mic (clearly toggled) */
+    .mic{
+      width:60px;height:60px;border-radius:999px;display:grid;place-items:center;
+      border:1px solid rgba(255,255,255,.14);
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      font-size:22px;transition:all .18s ease;
+      color:#d7e2ff;
+    }
+    .mic:hover{box-shadow:0 0 0 2px rgba(255,255,255,.10) inset}
+    .mic.on{
+      outline:3px solid rgba(6,182,212,.45);
+      background:linear-gradient(180deg, rgba(6,182,212,.22), rgba(6,182,212,.08));
+      color:#022a36;
+      box-shadow:0 6px 18px rgba(6,182,212,.30), 0 0 0 0 rgba(6,182,212,.35);
+      animation:pulse 1.6s ease-in-out infinite
+    }
+    @keyframes pulse{
+      0%{box-shadow:0 6px 18px rgba(6,182,212,.30), 0 0 0 0 rgba(6,182,212,.35)}
+      70%{box-shadow:0 6px 18px rgba(6,182,212,.30), 0 0 0 14px rgba(6,182,212,0)}
+      100%{box-shadow:0 6px 18px rgba(6,182,212,.30), 0 0 0 0 rgba(6,182,212,0)}
+    }
+
+    /* Tone */
+    .tone{display:inline-block;padding:6px 12px;border-radius:999px;font-weight:800;text-transform:capitalize;background:#334155}
+    .tone-neutral{background:#334155}.tone-frustrated{background:#7f1d1d}.tone-anxious{background:#78350f}
+    .tone-calm{background:#065f46}.tone-upbeat{background:#14532d}.tone-confident{background:#083344}
+    .tone-defensive{background:#7c2d12}.tone-uncertain{background:#3f3f46}
+    .emoji{font-size:46px;line-height:1}
+
+    ul{margin:8px 0 0 20px;padding:0}
+    pre{white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px}
+
+    .topbar{display:flex;gap:12px;align-items:center}
+    .spacer{flex:1}
+
+    /* Headings */
+    h3{margin:4px 0 10px;font-size:18px;letter-spacing:.2px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <!-- Header (no backend text) -->
+    <div class="header">
+      <div class="logo" aria-label="ToneCoach logo">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M13.5 2 6 12h5l-1.5 8L18 10h-5L13.5 2z" fill="#fff"/>
+        </svg>
+      </div>
+      <div>
+        <div class="title">ToneCoach</div>
+        <div class="sub">Emotion-aware live coaching</div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <div class="tab active" data-screen="live">Live</div>
+      <div class="tab" data-screen="summary">Summary</div>
+    </div>
+
+    <div class="frame container">
+      <!-- LIVE -->
+      <section id="screen-live">
+        <div class="card" style="margin-bottom:14px;">
+          <div class="topbar">
+            <button id="micBtn" class="mic" title="Toggle mic">🎤</button>
+            <div>
+              <div class="muted">Status</div>
+              <div id="status" style="font-weight:700">idle</div>
+            </div>
+            <div class="spacer"></div>
+            <!-- Primary style (matches Analyze) -->
+            <button id="endBtn" class="btn small" title="End & Summarize">End &amp; Summarize</button>
+          </div>
+        </div>
+
+        <div class="grid" style="margin-top:14px">
+          <div class="card" style="display:flex;gap:14px;align-items:center;">
+            <div id="emoji" class="emoji">😐</div>
+            <div>
+              <div class="muted">Emotion</div>
+              <div id="toneBadge" class="tone tone-neutral">neutral</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="muted" style="margin-bottom:6px">Advice</div>
+            <ul id="bullets"></ul>
+            <div id="why" class="muted" style="margin-top:8px"></div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <div class="muted">Manual test (no mic)</div>
+          <div class="row" style="margin-top:8px">
+            <textarea id="utterance" placeholder=""></textarea>
+            <button id="analyzeBtn" class="btn">Analyze</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SUMMARY -->
+      <section id="screen-summary" style="display:none">
+        <div class="card">
+          <h3>Summary</h3>
+          <pre id="summaryOut" class="card" style="padding:12px;margin:0"></pre>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <div class="muted">Raw JSON (utterances to summary):</div>
+          <textarea id="summaryJson" style="height:180px;margin-top:8px"></textarea>
+          <div style="height:10px"></div>
+          <button id="summaryBtn" class="btn ghost">Summarize again</button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Vapi Web (esm) -->
+  <script type="module">
+    import Vapi from 'https://esm.sh/@vapi-ai/web';
+    window.createVapi = function (publicKey) {
+      try { return new Vapi(publicKey); } catch {}
+      try { return new Vapi({ publicKey }); } catch {}
+      try { return Vapi(publicKey); } catch {}
+      try { return Vapi({ publicKey }); } catch {}
+      throw new Error('Vapi SDK export could not be constructed or called');
+    };
+  </script>
+
+  <script src="./main.js"></script>
+</body>
+</html>
